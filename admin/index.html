@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+</head>
+<body>
+    <h1>Admin Login</h1>
+    <input type="password" id="adminPass" placeholder="Enter Admin Password">
+    <button onclick="login()">Login</button>
+    <div id="panel" style="display:none;">
+        <textarea id="newAlert" placeholder="Enter new alert"></textarea>
+        <button onclick="addAlert()">Add Alert</button>
+    </div>
+    <script>
+        function login() {
+            if (document.getElementById('adminPass').value === 'nimbo123') {
+                document.getElementById('panel').style.display = 'block';
+            } else {
+                alert('Incorrect Password');
+            }
+        }
+
+        function addAlert() {
+            const newAlert = document.getElementById('newAlert').value;
+            fetch('../alerts.json').then(res => res.json()).then(data => {
+                data.alerts.push(newAlert);
+                const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'alerts.json';
+                a.click();
+            });
+        }
+    </script>
+</body>
+</html>
